@@ -28,10 +28,16 @@ def process(step_challenge_data_filename):
     today = now.replace(hour=0, minute=0, second=0, microsecond=0)
     # print(today)
     df_raw = df_raw[df_raw['Date'] < today]
-    print(df_raw)
+
+    df_raw.set_index('Date', inplace=True)
 
     # Calculate the cumulative sum for each person (column) across the dates
-    df_cumulative = df_raw.set_index('Date').cumsum()
+    df_cumulative = df_raw.cumsum()
+
+    # remove the first row of zeros from df_raw. It was added just to make the cumulative work
+    df_raw = df_raw[1:]
+
+    print(df_raw)
     print(df_cumulative)
 
     return df_raw, df_cumulative
