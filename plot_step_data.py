@@ -7,7 +7,7 @@ import numpy as np
 # plot the cumulative steps each person has walked in the month by day
 def plot_cumulative(df_cumulative):
     # set the figure size
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(14, 10.5))
 
     cmap = plt.get_cmap('jet')
     colors = cmap(np.linspace(0, 1, len(df_cumulative.columns)))
@@ -15,6 +15,12 @@ def plot_cumulative(df_cumulative):
     # Plot each person's steps
     for ii, person in enumerate(df_cumulative.columns):
         plt.plot(df_cumulative.index, df_cumulative[person], label=person, marker='o', color=colors[ii])
+        last_valid_index = np.argwhere(~np.isnan(df_cumulative[person])).flatten()[-1]
+        x_last = df_cumulative.index[last_valid_index]
+        y_last = int(df_cumulative[person][last_valid_index])
+        plt.annotate(f'{person}: {y_last}',
+                    xy=(x_last, y_last), xytext=(x_last, y_last + 10),
+                    horizontalalignment='right', verticalalignment='bottom')
 
     # Add labels and title
     plt.xlabel('Date')
